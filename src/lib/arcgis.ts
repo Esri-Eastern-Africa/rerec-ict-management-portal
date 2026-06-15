@@ -4,6 +4,12 @@ import type {
 	ArcGISUser
 } from "@/types";
 
+const REFERER =
+	process.env.NEXT_PUBLIC_SITE_URL ??
+	(process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}`
+		: "http://localhost:3000");
+
 export async function generateToken(
 	portalUrl: string,
 	username: string,
@@ -12,15 +18,18 @@ export async function generateToken(
 	const params = new URLSearchParams({
 		username,
 		password,
-		referer: process.env.NEXT_PUBLIC_SITE_URL
-			?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
+		client: "referer",
+		referer: REFERER,
 		expiration: "1440",
 		f: "json"
 	});
 
 	const res = await fetch(`${portalUrl}/sharing/rest/generateToken`, {
 		method: "POST",
-		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			Referer: REFERER,
+		},
 		body: params.toString()
 	});
 
@@ -36,7 +45,8 @@ export async function getPortalSelf(
 	token: string
 ): Promise<ArcGISUser> {
 	const res = await fetch(
-		`${portalUrl}/sharing/rest/community/self?f=json&token=${encodeURIComponent(token)}`
+		`${portalUrl}/sharing/rest/community/self?f=json&token=${encodeURIComponent(token)}`,
+		{ headers: { Referer: REFERER } }
 	);
 	const data = await res.json();
 	if (data.error)
@@ -70,7 +80,9 @@ export async function queryFeatures<T>(
 		token
 	});
 
-	const res = await fetch(`${layerUrl}/query?${params.toString()}`);
+	const res = await fetch(`${layerUrl}/query?${params.toString()}`, {
+		headers: { Referer: REFERER }
+	});
 	const data: ArcGISQueryResponse<T> = await res.json();
 	if (data.error) throw new Error(data.error.message);
 	return (data.features || []).map((f) => f.attributes);
@@ -86,7 +98,9 @@ export async function getFeatureCount(
 		f: "json",
 		token
 	});
-	const res = await fetch(`${layerUrl}/query?${params.toString()}`);
+	const res = await fetch(`${layerUrl}/query?${params.toString()}`, {
+		headers: { Referer: REFERER }
+	});
 	const data = await res.json();
 	if (data.error) throw new Error(data.error.message);
 	return data.count as number;
@@ -105,7 +119,10 @@ export async function addFeature(
 
 	const res = await fetch(`${layerUrl}/addFeatures`, {
 		method: "POST",
-		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			Referer: REFERER,
+		},
 		body: params.toString()
 	});
 	const data: ArcGISEditResponse = await res.json();
@@ -127,7 +144,10 @@ export async function updateFeature(
 
 	const res = await fetch(`${layerUrl}/updateFeatures`, {
 		method: "POST",
-		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			Referer: REFERER,
+		},
 		body: params.toString()
 	});
 	const data: ArcGISEditResponse = await res.json();
@@ -148,7 +168,10 @@ export async function deleteFeature(
 
 	const res = await fetch(`${layerUrl}/deleteFeatures`, {
 		method: "POST",
-		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			Referer: REFERER,
+		},
 		body: params.toString()
 	});
 	const data: ArcGISEditResponse = await res.json();
