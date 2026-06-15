@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Box } from '@mantine/core';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { useAuthStore } from '@/store/auth';
@@ -14,28 +13,20 @@ export default function Layout({ children }: LayoutProps) {
   const token = useAuthStore((s) => s.token);
 
   useEffect(() => {
-    if (!token) {
-      router.replace('/login');
-    }
+    if (!token) router.replace('/login');
   }, [token, router]);
 
   if (!token) return null;
 
   return (
-    <Box style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
-      <Sidebar />
-      <Box style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <Navbar />
-        <Box
-          style={{
-            flex: 1,
-            padding: '32px',
-            overflowY: 'auto',
-          }}
-        >
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto p-8">
           {children}
-        </Box>
-      </Box>
-    </Box>
+        </main>
+      </div>
+    </div>
   );
 }

@@ -1,13 +1,5 @@
 import { useRouter } from 'next/router';
-import {
-  Group,
-  Avatar,
-  Text,
-  Menu,
-  UnstyledButton,
-  Box,
-  Divider,
-} from '@mantine/core';
+import { Avatar, Text, Menu, UnstyledButton, Divider } from '@mantine/core';
 import { IconUser, IconLogout, IconChevronDown } from '@tabler/icons-react';
 import { useAuthStore } from '@/store/auth';
 import { toast } from 'react-toastify';
@@ -28,79 +20,56 @@ export default function Navbar() {
 
   const initials = user?.fullName
     ? user.fullName.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
-    : user?.username?.[0]?.toUpperCase() ?? 'U';
+    : (user?.username?.[0]?.toUpperCase() ?? 'U');
 
   return (
-    <Box
-      style={{
-        height: 64,
-        background: '#fff',
-        borderBottom: '1px solid #e9ecef',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 24px',
-        justifyContent: 'space-between',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-      }}
-    >
-      {/* Logo */}
-      <Group gap={12}>
-        <img src="/logo.png" alt="REREC logo" style={{ height: 36, width: 'auto', display: 'block' }} />
-        <Box>
-          <Text fw={700} size="sm" c="#1c1a17">REREC</Text>
-          <Text size="xs" c="dimmed">ICT Management Portal</Text>
-        </Box>
-      </Group>
+    <header className="h-16 w-full bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
+      {/* Logo — left */}
+      <div className="flex items-center gap-0">
+        <img src="/logo.png" alt="REREC logo" className="h-9 w-auto block" />
+        <div className="w-px h-7 bg-gray-200 mx-4 shrink-0" />
+        <Text size="sm" fw={500} c="#6b7280" style={{ letterSpacing: '0.01em' }}>
+          ICT Management Portal
+        </Text>
+      </div>
 
-      {/* User menu */}
-      <Menu shadow="md" width={200} position="bottom-end">
+      {/* User — right */}
+      <Menu shadow="md" width={220} position="bottom-end">
         <Menu.Target>
-          <UnstyledButton>
-            <Group gap={10}>
-              <Avatar
-                src={user?.thumbnailUrl}
-                radius="xl"
-                size={36}
-                color="orange"
-              >
+          <UnstyledButton
+            className="rounded-lg px-3 py-1.5 transition-colors hover:bg-gray-50"
+          >
+            <div className="flex items-center gap-2.5">
+              <Avatar src={user?.thumbnailUrl} radius="xl" size={36} color="orange">
                 {initials}
               </Avatar>
-              <Box style={{ display: 'none' }} visibleFrom="sm">
-                <Text size="sm" fw={500} c="#1c1a17" lineClamp={1}>
+              <div className="text-left min-w-0">
+                <p className="text-sm font-semibold text-[#1c1a17] leading-tight truncate max-w-[160px]">
                   {user?.fullName || user?.username || 'User'}
-                </Text>
-                <Text size="xs" c="dimmed" lineClamp={1}>
-                  {user?.email || ''}
-                </Text>
-              </Box>
-              <IconChevronDown size={14} color="#868e96" />
-            </Group>
+                </p>
+                <p className="text-xs text-gray-400 leading-tight truncate max-w-[160px]">
+                  {user?.email || user?.username || ''}
+                </p>
+              </div>
+              <IconChevronDown size={14} color="#9ca3af" className="shrink-0" />
+            </div>
           </UnstyledButton>
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Box style={{ padding: '10px 12px' }}>
-            <Text size="sm" fw={500}>{user?.fullName || user?.username}</Text>
+          <div className="px-3 py-2.5">
+            <Text size="sm" fw={600}>{user?.fullName || user?.username}</Text>
             <Text size="xs" c="dimmed">{user?.email}</Text>
-          </Box>
+          </div>
           <Divider />
-          <Menu.Item
-            leftSection={<IconUser size={16} />}
-            onClick={() => router.push('/profile')}
-          >
+          <Menu.Item leftSection={<IconUser size={16} />} onClick={() => router.push('/profile')}>
             Profile
           </Menu.Item>
-          <Menu.Item
-            leftSection={<IconLogout size={16} />}
-            color="red"
-            onClick={handleSignOut}
-          >
+          <Menu.Item leftSection={<IconLogout size={16} />} color="red" onClick={handleSignOut}>
             Sign out
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-    </Box>
+    </header>
   );
 }

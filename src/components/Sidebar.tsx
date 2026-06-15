@@ -1,20 +1,12 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
-  IconLayoutDashboard,
-  IconCategory,
-  IconBuildingFactory,
-  IconBuildingBank,
-  IconFolderDollar,
-  IconCircleDotted,
-  IconProgressCheck,
-  IconUsersGroup,
-  IconFileDescription,
-  IconBolt,
-  IconTruck,
-  IconTransform,
+  IconLayoutDashboard, IconCategory, IconBuildingFactory,
+  IconBuildingBank, IconFolderDollar, IconCircleDotted,
+  IconProgressCheck, IconUsersGroup, IconFileDescription,
+  IconBolt, IconTruck, IconTransform,
 } from '@tabler/icons-react';
-import { NavLink, ScrollArea, Text, Box } from '@mantine/core';
+import { NavLink, ScrollArea } from '@mantine/core';
 
 const navItems = [
   { label: 'Dashboard', href: '/', icon: IconLayoutDashboard },
@@ -35,23 +27,11 @@ export default function Sidebar() {
   const router = useRouter();
 
   return (
-    <Box
-      style={{
-        width: 260,
-        minHeight: '100vh',
-        background: '#1c1a17',
-        display: 'flex',
-        flexDirection: 'column',
-        flexShrink: 0,
-      }}
+    <aside
+      className="w-[260px] shrink-0 sticky top-16 overflow-hidden flex flex-col"
+      style={{ height: 'calc(100vh - 64px)', background: '#1c1a17' }}
     >
-      <Box style={{ padding: '24px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <Text size="xs" c="dimmed" tt="uppercase" fw={600} style={{ letterSpacing: '0.08em' }}>
-          ICT Management
-        </Text>
-      </Box>
-
-      <ScrollArea style={{ flex: 1, padding: '8px 0' }}>
+      <ScrollArea type="never" className="flex-1 py-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = router.pathname === item.href;
@@ -67,10 +47,7 @@ export default function Sidebar() {
                     margin: '2px 8px',
                     color: active ? '#fff' : 'rgba(255,255,255,0.65)',
                     background: active ? 'rgba(253, 126, 20, 0.22)' : 'transparent',
-                    '&:hover': {
-                      background: 'rgba(255,255,255,0.06)',
-                      color: '#fff',
-                    },
+                    '&:hover': { background: 'rgba(255,255,255,0.06)', color: '#fff' },
                   },
                   label: { fontSize: 14 },
                 }}
@@ -79,6 +56,6 @@ export default function Sidebar() {
           );
         })}
       </ScrollArea>
-    </Box>
+    </aside>
   );
 }

@@ -1,15 +1,4 @@
-import {
-  Card,
-  Avatar,
-  Text,
-  Title,
-  Stack,
-  Group,
-  Box,
-  Badge,
-  Divider,
-  Button,
-} from '@mantine/core';
+import { Card, Avatar, Text, Title, Badge, Divider, Button } from '@mantine/core';
 import { IconMail, IconUser, IconUsers, IconLogout } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -36,66 +25,60 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <Stack gap={28} style={{ maxWidth: 640 }}>
-        <Box>
+      <div className="flex flex-col gap-7 max-w-[640px]">
+        <div>
           <Title order={2} fw={700} c="#1c1a17">Profile</Title>
           <Text c="dimmed" size="sm" mt={4}>Your ArcGIS portal account details</Text>
-        </Box>
+        </div>
 
         <Card shadow="xs" radius="lg" p="xl" style={{ border: '1px solid #e9ecef' }}>
-          <Group gap={20} mb={24}>
-            <Avatar
-              src={user?.thumbnailUrl}
-              radius="xl"
-              size={72}
-              color="blue"
-              style={{ fontSize: 28 }}
-            >
+          <div className="flex items-center gap-5 mb-6">
+            <Avatar src={user?.thumbnailUrl} radius="xl" size={72} color="orange">
               {initials}
             </Avatar>
-            <Box>
+            <div>
               <Title order={3} fw={700} c="#1c1a17">
                 {user?.fullName || user?.username || 'Unknown User'}
               </Title>
               <Text size="sm" c="dimmed">ArcGIS Portal User</Text>
-            </Box>
-          </Group>
+            </div>
+          </div>
 
           <Divider mb={20} />
 
-          <Stack gap={16}>
-            <Group gap={12}>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3">
               <IconUser size={18} color="#868e96" />
-              <Box>
+              <div>
                 <Text size="xs" c="dimmed" fw={500}>Username</Text>
                 <Text size="sm" fw={500}>{user?.username || '—'}</Text>
-              </Box>
-            </Group>
+              </div>
+            </div>
 
-            <Group gap={12}>
+            <div className="flex items-center gap-3">
               <IconMail size={18} color="#868e96" />
-              <Box>
+              <div>
                 <Text size="xs" c="dimmed" fw={500}>Email</Text>
                 <Text size="sm" fw={500}>{user?.email || '—'}</Text>
-              </Box>
-            </Group>
+              </div>
+            </div>
 
             {user?.groups && user.groups.length > 0 && (
-              <Box>
-                <Group gap={12} mb={8}>
+              <div>
+                <div className="flex items-center gap-3 mb-2">
                   <IconUsers size={18} color="#868e96" />
                   <Text size="xs" c="dimmed" fw={500}>Groups</Text>
-                </Group>
-                <Group gap={8} ml={30}>
+                </div>
+                <div className="flex flex-wrap gap-2 ml-[30px]">
                   {user.groups.map((g) => (
                     <Badge key={g.id} variant="light" color="orange" size="sm">
                       {g.title}
                     </Badge>
                   ))}
-                </Group>
-              </Box>
+                </div>
+              </div>
             )}
-          </Stack>
+          </div>
         </Card>
 
         <Card shadow="xs" radius="lg" p="xl" style={{ border: '1px solid #ffe3e3' }}>
@@ -103,16 +86,11 @@ export default function ProfilePage() {
           <Text size="sm" c="dimmed" mb={16}>
             This will end your session and return you to the login page.
           </Text>
-          <Button
-            leftSection={<IconLogout size={16} />}
-            color="red"
-            variant="light"
-            onClick={handleSignOut}
-          >
+          <Button leftSection={<IconLogout size={16} />} color="red" variant="light" onClick={handleSignOut}>
             Sign out
           </Button>
         </Card>
-      </Stack>
+      </div>
     </Layout>
   );
 }

@@ -12,7 +12,8 @@ export async function generateToken(
 	const params = new URLSearchParams({
 		username,
 		password,
-		referer: process.env.VERCEL_URL!,
+		referer: process.env.NEXT_PUBLIC_SITE_URL
+			?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
 		expiration: "1440",
 		f: "json"
 	});

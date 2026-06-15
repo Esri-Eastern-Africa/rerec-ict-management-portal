@@ -1,27 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
-  SimpleGrid,
-  Card,
-  Text,
-  Title,
-  Box,
-  Skeleton,
-  Group,
-  ThemeIcon,
-  Stack,
+  SimpleGrid, Card, Text, Title, Skeleton, ThemeIcon,
 } from '@mantine/core';
 import {
-  IconCategory,
-  IconBuildingFactory,
-  IconBuildingBank,
-  IconFolderDollar,
-  IconCircleDotted,
-  IconProgressCheck,
-  IconUsersGroup,
-  IconFileDescription,
-  IconBolt,
-  IconTruck,
-  IconTransform,
+  IconCategory, IconBuildingFactory, IconBuildingBank, IconFolderDollar,
+  IconCircleDotted, IconProgressCheck, IconUsersGroup, IconFileDescription,
+  IconBolt, IconTruck, IconTransform,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
@@ -49,9 +33,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!token) return;
-    fetch('/api/dashboard/counts', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch('/api/dashboard/counts', { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => r.json())
       .then((data) => { setCounts(data as DashboardCounts); setLoading(false); })
       .catch(() => setLoading(false));
@@ -59,11 +41,11 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <Stack gap={28}>
-        <Box>
+      <div className="flex flex-col gap-7">
+        <div>
           <Title order={2} fw={700} c="#1c1a17">Dashboard</Title>
           <Text c="dimmed" size="sm" mt={4}>Overview of all reference data in ArcGIS</Text>
-        </Box>
+        </div>
 
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
           {cards.map(({ key, label, icon: Icon, href, color }) => (
@@ -72,11 +54,7 @@ export default function Dashboard() {
                 shadow="xs"
                 radius="lg"
                 p="lg"
-                style={{
-                  border: '1px solid #e9ecef',
-                  cursor: 'pointer',
-                  transition: 'transform 0.15s, box-shadow 0.15s',
-                }}
+                style={{ border: '1px solid #e9ecef', cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s' }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)';
                   (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
@@ -86,8 +64,8 @@ export default function Dashboard() {
                   (e.currentTarget as HTMLDivElement).style.boxShadow = '';
                 }}
               >
-                <Group justify="space-between" align="flex-start">
-                  <Box>
+                <div className="flex items-start justify-between">
+                  <div>
                     {loading ? (
                       <Skeleton height={36} width={60} mb={4} radius="sm" />
                     ) : (
@@ -96,20 +74,16 @@ export default function Dashboard() {
                       </Text>
                     )}
                     <Text size="sm" c="dimmed" mt={6} fw={500}>{label}</Text>
-                  </Box>
-                  <ThemeIcon
-                    radius="md"
-                    size={44}
-                    style={{ background: `${color}18` }}
-                  >
+                  </div>
+                  <ThemeIcon radius="md" size={44} style={{ background: `${color}18` }}>
                     <Icon size={22} color={color} />
                   </ThemeIcon>
-                </Group>
+                </div>
               </Card>
             </Link>
           ))}
         </SimpleGrid>
-      </Stack>
+      </div>
     </Layout>
   );
 }

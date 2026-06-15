@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '@/styles/globals.css';
 
 import type { AppProps } from 'next/app';
-import { MantineProvider, createTheme } from '@mantine/core';
+import { MantineProvider, createTheme, Modal } from '@mantine/core';
 import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
@@ -17,6 +17,20 @@ const theme = createTheme({
       '#ffa94d', '#ff922b', '#fd7e14', '#f76707',
       '#e8590c', '#d9480f',
     ],
+  },
+  components: {
+    Modal: Modal.extend({
+      defaultProps: {
+        centered: true,
+      },
+      styles: {
+        title: {
+          fontSize: '1.125rem',
+          fontWeight: 700,
+          lineHeight: 1.3,
+        },
+      },
+    }),
   },
 });
 
